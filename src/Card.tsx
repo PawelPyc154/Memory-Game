@@ -1,21 +1,17 @@
 import React from 'react';
 
 export interface CardProps {
-  card: boolean;
+  card: { id: number; value: string; hidden: boolean; metch: boolean };
   handleClick: (number: number) => void;
 }
 
 const Card: React.SFC<CardProps> = ({ card, handleClick }) => {
-  const number = 1;
-
   return (
     <>
-      {card ? (
-        <div className="card card__number">{number}</div>
+      {card.hidden ? (
+        <div className="card" onClick={() => handleClick(card.id)} />
       ) : (
-        <>
-          <div className="card" onClick={() => handleClick(number)} />
-        </>
+        <div className="card card__number">{card.value}</div>
       )}
     </>
   );
