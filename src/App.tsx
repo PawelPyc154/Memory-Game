@@ -7,7 +7,7 @@ interface CardType {
   id: number;
   value: string;
   hidden: boolean;
-  metch: boolean;
+  matched: boolean;
 }
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
     let array: CardType[] = [];
     // add random item too array
     for (let i = 0; i < 8; i++) {
-      array[i] = { id: 0, value: (Math.random() * 100).toFixed(), hidden: true, metch: false };
+      array[i] = { id: 0, value: (Math.random() * 100).toFixed(), hidden: true, matched: false };
     }
     // duplicate item in array
     array = [...array, ...array];
@@ -32,12 +32,34 @@ function App() {
     setCards(array);
   }, []);
 
+  // hidden card
   useEffect(() => {
+    const visible = cards?.filter((card: CardType) => card.hidden === false);
+
+    if (visible && visible.length === 2) {
+      if (visible[0].value === visible[1].value) {
+        setTimeout(() => {
+          setCards((prev: CardType[]) =>
+            prev.map((card: CardType) =>
+              card.value === visible[0].value ? { ...card, hidden: true, matched: true } : card,
+            ),
+          );
+        }, 500);
+      } else {
+        setTimeout(() => {
+          setCards((prev: CardType[]) => prev.map((card: CardType) => ({ ...card, hidden: true })));
+        }, 500);
+      }
+    }
     console.log(cards);
   }, [cards]);
 
   const handleClick = (id: number) => {
-    setCards((prev: CardType[]) => prev.map((card: CardType) => (card.id === id ? { ...card, hidden: false } : card)));
+    if (cards?.filter((card: CardType) => card.hidden === false).length < 2) {
+      setCards((prev: CardType[]) =>
+        prev.map((card: CardType) => (card.id === id ? { ...card, hidden: false } : card)),
+      );
+    }
   };
 
   const [input, setInput] = useState(1);
