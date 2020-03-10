@@ -1,21 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+
 import './App.css';
+import Card from './Card';
 
 function App() {
+  const [card, setCard] = useState(false);
+
+  const handleClick = (number: number) => {
+    setCard(() => true);
+
+    setTimeout(() => {
+      alert(number);
+    }, 100);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit
-          <code>src/App.tsx</code>
-          Sand save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
+      <button type="button" onClick={() => setCard(false)}>
+        hidden
+      </button>
+
+      <Card card={card} handleClick={handleClick} />
     </div>
   );
 }
