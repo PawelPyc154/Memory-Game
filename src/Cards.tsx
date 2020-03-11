@@ -18,6 +18,7 @@ export interface CardsProps {
 const Cards: React.SFC<CardsProps> = ({ choice, setChoice }) => {
   const [cards, setCards] = useState();
 
+  // add random item to cards state
   useEffect(() => {
     let array: CardType[] = [];
     // add random item too array
@@ -37,7 +38,7 @@ const Cards: React.SFC<CardsProps> = ({ choice, setChoice }) => {
     setCards(array);
   }, []);
 
-  // hidden card
+  // logic matched and hidde card
   useEffect(() => {
     const visible = cards?.filter((card: CardType) => card.hidden === false);
 
@@ -60,9 +61,10 @@ const Cards: React.SFC<CardsProps> = ({ choice, setChoice }) => {
 
   const [counter, setcCunter] = useState(0);
 
+  // visible card and count
+
   const handleClick = (id: number) => {
     setcCunter(prev => prev + 1);
-
     if (cards?.filter((card: CardType) => card.hidden === false).length < 2) {
       setCards((prev: CardType[]) =>
         prev.map((card: CardType) => (card.id === id ? { ...card, hidden: false } : card)),
