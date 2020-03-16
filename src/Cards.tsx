@@ -16,7 +16,7 @@ export interface CardsProps {
 }
 
 const Cards: React.SFC<CardsProps> = ({ choice, setChoice }) => {
-  const [cards, setCards] = useState();
+  const [cards, setCards] = useState<CardType[] | null>(null);
 
   // add random item to cards state
   useEffect(() => {
@@ -45,15 +45,20 @@ const Cards: React.SFC<CardsProps> = ({ choice, setChoice }) => {
     if (visible && visible.length === 2) {
       if (visible[0].value === visible[1].value) {
         setTimeout(() => {
-          setCards((prev: CardType[]) =>
-            prev.map((card: CardType) =>
-              card.value === visible[0].value ? { ...card, hidden: true, matched: true } : card,
-            ),
+          setCards(
+            (prev: CardType[] | null) =>
+              prev &&
+              prev.map((card: CardType) =>
+                card.value === visible[0].value ? { ...card, hidden: true, matched: true } : card,
+              ),
           );
         }, 500);
       } else {
         setTimeout(() => {
-          setCards((prev: CardType[]) => prev.map((card: CardType) => ({ ...card, hidden: true })));
+          setCards(
+            (prevState: CardType[] | null) =>
+              prevState && prevState.map((card: CardType) => ({ ...card, hidden: true })),
+          );
         }, 500);
       }
     }
@@ -65,9 +70,10 @@ const Cards: React.SFC<CardsProps> = ({ choice, setChoice }) => {
 
   const handleClick = (id: number) => {
     setcCunter(prev => prev + 1);
-    if (cards?.filter((card: CardType) => card.hidden === false).length < 2) {
-      setCards((prev: CardType[]) =>
-        prev.map((card: CardType) => (card.id === id ? { ...card, hidden: false } : card)),
+    if (cards && cards.filter((card: CardType) => card.hidden === false).length < 2) {
+      setCards(
+        (prev: CardType[] | null) =>
+          prev && prev.map((card: CardType) => (card.id === id ? { ...card, hidden: false } : card)),
       );
     }
   };
